@@ -625,6 +625,15 @@ function App() {
         body: { phase, limit: PHASE_TEST_QUESTION_COUNT, adaptive: false, difficulty: null },
       })
 
+      if (!(data.questions ?? []).length) {
+        setTestState({
+          loading: false,
+          message: `No questions available for ${phase}. Please seed your database and try again.`,
+          result: null,
+        })
+        return
+      }
+
       setGeneratedTest(data.questions ?? [])
       setTestTimer((data.questions?.length ?? PHASE_TEST_QUESTION_COUNT) * 90)
       setTestState({ loading: false, message: `${data.count} questions loaded for ${phase}.`, result: null })
@@ -655,6 +664,15 @@ function App() {
           retakeQuestionIds: retakeState.questionIds,
         },
       })
+
+      if (!(data.questions ?? []).length) {
+        setTestState({
+          loading: false,
+          message: 'No questions available for retake right now. Please try a fresh test.',
+          result: null,
+        })
+        return
+      }
 
       setGeneratedTest(data.questions ?? [])
       setTestTimer((data.questions?.length ?? retakeState.questionIds.length) * 90)

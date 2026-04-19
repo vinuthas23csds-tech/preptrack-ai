@@ -101,6 +101,10 @@ Detailed steps are in `DEPLOYMENT.md`.
 
 For Render, a ready Blueprint config is provided in `render.yaml`.
 
+## Release Notes
+
+See `CHANGELOG.md` for shipped features and fixes.
+
 ## API Overview
 
 - `POST /api/auth/register`

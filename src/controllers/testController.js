@@ -42,6 +42,14 @@ const generateTest = async (req, res, next) => {
       retakeQuestionIds,
     });
 
+    if (!questions.length) {
+      return res.status(404).json({
+        message:
+          "No questions available for this phase yet. Please seed questions for this database and try again.",
+        phase: selectedPhase,
+      });
+    }
+
     return res.json({
       count: questions.length,
       questions,

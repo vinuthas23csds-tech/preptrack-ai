@@ -12,10 +12,29 @@ const { authLimiter, apiLimiter } = require("./middleware/rateLimit");
 
 const app = express();
 
+// Required behind Render/other proxies so rate limiting and IP handling behave correctly.
+app.set("trust proxy", 1);
+
+const allowedOrigins = new Set(
+  String(env.clientUrl || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean)
+);
+
 app.use(helmet());
-app.use(cors({ origin: env.clientUrl, credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow non-browser requests (curl/postman/health checks) with no Origin header.
+      if (!origin) return callback(null, true);
+      return callback(null, allowedOrigins.has(origin));
+    },
+    credentials: true,
+  })
+);
 app.use(morgan("dev"));
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
 app.use("/api/auth", authLimiter);
 app.use("/api", apiLimiter);
@@ -49,6 +68,8 @@ if (shouldServeFrontend) {
 
     return res.sendFile(path.join(frontendDistPath, "index.html"));
   });
+} else {
+  console.warn("Frontend dist not found; serving API routes only.");
 }
 
 app.use(errorHandler);
