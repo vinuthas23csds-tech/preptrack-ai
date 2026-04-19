@@ -27,7 +27,7 @@ app.get("/api/health", (_req, res) => {
 app.use("/api", routes);
 
 const frontendDistPath = path.resolve(__dirname, "../frontend/dist");
-const shouldServeFrontend = env.nodeEnv === "production" && fs.existsSync(frontendDistPath);
+const shouldServeFrontend = fs.existsSync(frontendDistPath);
 
 if (shouldServeFrontend) {
   app.use(express.static(frontendDistPath));
