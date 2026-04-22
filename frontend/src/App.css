@@ -400,13 +400,18 @@ button:disabled {
 .option-list label {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 10px;
   padding: 13px 14px;
   border-radius: 14px;
   border: 1px solid rgba(148, 163, 184, 0.26);
   background: rgba(255, 255, 255, 0.86);
   transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+}
+
+.option-list label span {
+  flex: 1;
+  text-align: left;
 }
 
 .check-item:hover,

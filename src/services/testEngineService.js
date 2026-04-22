@@ -92,6 +92,7 @@ const generateQuestions = async ({
   const normalizedLimit = normalizedPhase === "FINAL" ? 120 : limit;
 
   const usedIds = retakeQuestionIds?.length ? [] : await getUsedQuestionIds(userId, normalizedPhase);
+  const isRetakeFlow = Boolean(retakeQuestionIds?.length);
 
   const query = buildQuery({
     phase: normalizedPhase,
@@ -120,9 +121,13 @@ const generateQuestions = async ({
 
   let questions = await Question.find(query).limit(normalizedLimit * 3).lean();
 
-  if (questions.length < normalizedLimit) {
-    const fallbackQuery = { ...query };
-    delete fallbackQuery._id;
+  if (questions.length < normalizedLimit && !isRetakeFlow) {
+    // Relax topic/difficulty filters, but keep non-repetition constraints so users don't get the same questions repeatedly.
+    const fallbackQuery = {
+      _id: { $nin: usedIds },
+      ...(normalizedPhase === "FINAL" ? { phase: { $in: PHASES } } : { phase: normalizedPhase }),
+    };
+
     questions = await Question.find(fallbackQuery).limit(normalizedLimit * 3).lean();
   }
 
