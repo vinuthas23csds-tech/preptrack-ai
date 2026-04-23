@@ -24,13 +24,28 @@ const allowedOrigins = new Set(
 
 app.use(helmet());
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow non-browser requests (curl/postman/health checks) with no Origin header.
-      if (!origin) return callback(null, true);
-      return callback(null, allowedOrigins.has(origin));
-    },
-    credentials: true,
+  cors((req, callback) => {
+    const requestOrigin = req.header("Origin");
+
+    // Allow non-browser requests (curl/postman/health checks) with no Origin header.
+    if (!requestOrigin) {
+      return callback(null, { origin: true, credentials: true });
+    }
+
+    let isAllowed = allowedOrigins.has(requestOrigin);
+
+    // Same-origin API calls should work even if CLIENT_URL is not set correctly.
+    if (!isAllowed) {
+      try {
+        const originHost = new URL(requestOrigin).host;
+        const requestHost = req.get("host");
+        isAllowed = Boolean(requestHost && originHost === requestHost);
+      } catch (_error) {
+        isAllowed = false;
+      }
+    }
+
+    return callback(null, { origin: isAllowed, credentials: true });
   })
 );
 app.use(morgan("dev"));

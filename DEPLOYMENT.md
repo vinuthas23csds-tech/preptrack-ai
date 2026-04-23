@@ -9,19 +9,19 @@ This project can be deployed as a single service:
 Set these variables in your hosting platform:
 
 - `NODE_ENV=production`
-- `PORT=5000` (or platform-provided port)
+- `PORT=<platform-provided-port>` (do not hardcode on Render)
 - `MONGO_URI=<your-mongodb-connection-string>`
 - `JWT_SECRET=<strong-random-secret>`
 - `JWT_EXPIRES_IN=7d`
-- `CLIENT_URL=<frontend-origin>`
+- `CLIENT_URL=<frontend-origin>` (comma-separated if multiple origins)
 
 Example:
 
 ```env
 NODE_ENV=production
-PORT=5000
-MONGO_URI=mongodb+srv://<user>:abc-1721@cluster.mongodb.net/preptrack_ai
-JWT_SECRET=vinutha17022005
+PORT=<set by host>
+MONGO_URI=mongodb://vinuthas23csds_db_user:abc-1721@ac-b5vi6wo-shard-00-00.sgervhg.mongodb.net:27017,ac-b5vi6wo-shard-00-01.sgervhg.mongodb.net:27017,ac-b5vi6wo-shard-00-02.sgervhg.mongodb.net:27017/preptrack_ai?ssl=true&replicaSet=atlas-twj77j-shard-0&authSource=admin&retryWrites=true&w=majority
+JWT_SECRET=<random-64-char-secret>
 JWT_EXPIRES_IN=7d
 CLIENT_URL=https://your-app-domain.com
 ```
@@ -93,7 +93,7 @@ This repo includes `render.yaml` for a Blueprint-based deploy.
 2. In Render, click New -> Blueprint.
 3. Select your repository.
 4. Set `MONGO_URI` to your MongoDB Atlas URI.
-5. After first deploy, set `CLIENT_URL` to your final Render app URL if it differs.
+5. Set `CLIENT_URL` to your frontend URL. If your frontend is same-origin on this backend service, this can be left empty.
 
 Render uses:
 

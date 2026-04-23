@@ -100,6 +100,7 @@ const submitTest = async (req, res, next) => {
       total: result.total,
       accuracy: result.total ? Number(((result.score / result.total) * 100).toFixed(2)) : 0,
       topicBreakdown: result.topicBreakdown,
+      questionReview: result.questionReview,
       improvementAreas,
       weakAreas,
       wrongQuestionIds: result.wrongQuestionIds,

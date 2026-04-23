@@ -4,7 +4,7 @@ import './App.css'
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
 const TOKEN_KEY = 'preptrack_token'
 const PROJECT_NAME = 'PrepTrack AI'
-const PHASE_TEST_QUESTION_COUNT = 30
+const PHASE_TEST_QUESTION_COUNT = 10
 
 const PHASES = [
   { code: 'DSA', title: 'Data Structures' },
@@ -372,8 +372,24 @@ function App() {
       accuracy: result.accuracy,
       improvementAreas: orderedTopics,
       weakAreas,
+      questionReview: Array.isArray(result.questionReview) ? result.questionReview : [],
     }
   }, [testState.result])
+
+  const reviewByQuestionId = useMemo(() => {
+    if (!derivedResult?.questionReview?.length) return new Map()
+
+    return new Map(
+      derivedResult.questionReview.map((item) => [
+        String(item.questionId),
+        {
+          selectedAnswer: item.selectedAnswer,
+          correctAnswer: item.correctAnswer,
+          isCorrect: Boolean(item.isCorrect),
+        },
+      ])
+    )
+  }, [derivedResult])
 
   const loadProfile = async (authToken) => {
     const [me, progressData, overviewData] = await Promise.all([
@@ -937,17 +953,35 @@ function App() {
                   </div>
                   <div className="option-list">
                     {question.options.map((option) => (
-                      <label key={option}>
+                      <label
+                        key={option}
+                        className={
+                          testState.result
+                            ? option === reviewByQuestionId.get(String(question._id))?.correctAnswer
+                              ? 'answer-correct'
+                              : option === reviewByQuestionId.get(String(question._id))?.selectedAnswer
+                                ? 'answer-wrong'
+                                : ''
+                            : ''
+                        }
+                      >
                         <input
                           type="radio"
                           name={question._id}
                           checked={answers[question._id] === option}
+                          disabled={Boolean(testState.result)}
                           onChange={() => setAnswers((current) => ({ ...current, [question._id]: option }))}
                         />
                         <span>{option}</span>
                       </label>
                     ))}
                   </div>
+
+                  {testState.result ? (
+                    <p className={`answer-summary ${reviewByQuestionId.get(String(question._id))?.isCorrect ? 'answer-summary-correct' : 'answer-summary-wrong'}`}>
+                      Your answer: {reviewByQuestionId.get(String(question._id))?.selectedAnswer || 'No answer'} | Correct answer: {reviewByQuestionId.get(String(question._id))?.correctAnswer || 'N/A'}
+                    </p>
+                  ) : null}
 
                   <label className="note-field">
                     <span>My note</span>

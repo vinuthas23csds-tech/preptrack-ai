@@ -151,6 +151,7 @@ const evaluateTestSubmission = async ({ phase, questionIds, answers }) => {
   let correctCount = 0;
   const wrongQuestionIds = [];
   const topicStats = new Map();
+  const questionReview = [];
 
   for (const question of questions) {
     const selected = answerMap.get(String(question._id));
@@ -169,6 +170,15 @@ const evaluateTestSubmission = async ({ phase, questionIds, answers }) => {
     existing.total += 1;
     if (isCorrect) existing.correct += 1;
     topicStats.set(question.topic, existing);
+
+    questionReview.push({
+      questionId: question._id,
+      question: question.question,
+      topic: question.topic,
+      selectedAnswer: selected || "",
+      correctAnswer: question.answer,
+      isCorrect,
+    });
   }
 
   const topicBreakdown = Array.from(topicStats.values()).map((topic) => ({
@@ -187,6 +197,7 @@ const evaluateTestSubmission = async ({ phase, questionIds, answers }) => {
     questionIds: questions.map((q) => q._id),
     wrongQuestionIds,
     topicBreakdown,
+    questionReview,
   };
 };
 
