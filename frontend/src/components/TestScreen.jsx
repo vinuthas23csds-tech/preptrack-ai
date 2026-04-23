@@ -190,6 +190,14 @@ function TestScreen({
           <p className="hint-text">Preparing your test. If this takes long, go back and start again.</p>
         ) : null}
 
+        {generatedTest.length ? (
+          <div className="test-footer-actions">
+            <button className="take-test" onClick={handleSubmitTest} disabled={testState.loading}>
+              {testState.loading ? 'Submitting...' : 'Submit test'}
+            </button>
+          </div>
+        ) : null}
+
         {studyMessage ? <p className="status-text">{studyMessage}</p> : null}
       </section>
     </main>

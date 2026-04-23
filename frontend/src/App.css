@@ -455,6 +455,12 @@ button:disabled {
   flex-wrap: wrap;
 }
 
+.test-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
 .question-card-head {
   display: flex;
   align-items: start;
