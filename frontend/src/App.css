@@ -221,6 +221,37 @@ button:disabled {
   gap: 16px;
 }
 
+.phase-tabs {
+  position: sticky;
+  top: 12px;
+  z-index: 6;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+.phase-tab {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--text-main);
+  border: 1px solid rgba(37, 99, 235, 0.16);
+  box-shadow: none;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+}
+
+.phase-tab.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-2));
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.24);
+}
+
 .phase-card {
   display: grid;
   gap: 10px;
@@ -352,6 +383,28 @@ button:disabled {
   border-top: 1px solid rgba(148, 163, 184, 0.3);
   display: grid;
   gap: 14px;
+}
+
+.checklist-section-group {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.checklist-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-subtle);
+}
+
+.checklist-group-head h4 {
+  margin: 0;
+  color: var(--text-main);
 }
 
 .checklist-head {
