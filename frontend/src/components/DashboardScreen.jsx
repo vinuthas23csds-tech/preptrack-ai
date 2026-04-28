@@ -31,6 +31,8 @@ function DashboardScreen({
   completedSet,
   handleRemoveCustomChecklistItem,
   dsaPracticeLinks,
+  handleTakeTest,
+  isPhaseTestUnlocked,
 }) {
   const [showAllSavedItems, setShowAllSavedItems] = useState(false)
   const [expandedChecklistPhases, setExpandedChecklistPhases] = useState({})
@@ -197,6 +199,14 @@ function DashboardScreen({
                 >
                   {isOpen ? 'Close points' : 'Open points'}
                 </button>
+                {phase.code !== 'RESUME' ? (
+                  <button
+                    className="take-test"
+                    onClick={() => handleTakeTest(phase.code)}
+                  >
+                    Take test
+                  </button>
+                ) : null}
               </div>
 
               {isOpen ? (

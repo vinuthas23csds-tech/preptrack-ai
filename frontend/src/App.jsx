@@ -3,6 +3,7 @@ import './App.css'
 
 const AuthScreen = lazy(() => import('./components/AuthScreen.jsx'))
 const DashboardScreen = lazy(() => import('./components/DashboardScreen.jsx'))
+const TestScreen = lazy(() => import('./components/TestScreen.jsx'))
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '/api'
 const TOKEN_KEY = 'preptrack_token'
@@ -1166,6 +1167,40 @@ function App() {
     )
   }
 
+  if (activeView === 'test') {
+    return (
+      <>
+        <Suspense fallback={<p className="hint-text">Loading test...</p>}>
+          <TestScreen
+            projectName={PROJECT_NAME}
+            selectedPhase={selectedPhase}
+            goToDashboard={goToDashboard}
+            handleLogout={handleLogout}
+            answeredCount={answeredCount}
+            generatedTest={generatedTest}
+            testTimer={testTimer}
+            formatTime={formatTime}
+            handleSubmitTest={handleSubmitTest}
+            testState={testState}
+            retakeState={retakeState}
+            handleRetakeWrongQuestions={handleRetakeWrongQuestions}
+            openResultModal={() => setResultModalOpen(true)}
+            studySavingId={studySavingId}
+            studyMap={studyMap}
+            studyDrafts={studyDrafts}
+            upsertStudyItem={upsertStudyItem}
+            answers={answers}
+            setAnswers={setAnswers}
+            reviewByQuestionId={reviewByQuestionId}
+            setStudyDrafts={setStudyDrafts}
+            removeStudyItem={removeStudyItem}
+          />
+        </Suspense>
+        {overlays}
+      </>
+    )
+  }
+
   return (
     <>
       <Suspense fallback={<p className="hint-text">Loading dashboard...</p>}>
@@ -1197,6 +1232,8 @@ function App() {
           completedSet={completedSet}
           handleRemoveCustomChecklistItem={handleRemoveCustomChecklistItem}
           dsaPracticeLinks={DSA_PRACTICE_LINKS}
+          handleTakeTest={handleTakeTest}
+          isPhaseTestUnlocked={isPhaseTestUnlocked}
         />
       </Suspense>
       {overlays}
